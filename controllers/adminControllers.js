@@ -1,7 +1,8 @@
-const Article = require('../models/movieModel');
+const Article = require('../models/articleMode');
 
 
 const getArticlesAdmin = async (req, res) => {
+
     try {
 
         const article = await Article.find()
@@ -14,6 +15,7 @@ const getArticlesAdmin = async (req, res) => {
             })
 
         } else {
+
             return res.render('admin/adminView', {
                 article,
             })
@@ -22,6 +24,7 @@ const getArticlesAdmin = async (req, res) => {
 
 
     } catch (error) {
+
         return res.status(500).json({
             ok: false,
             msg: "Error retrieving the movie",
@@ -32,12 +35,11 @@ const getArticlesAdmin = async (req, res) => {
 
 const getArticleAdmin = async (req, res) => {
 
+    const id = req.params.id;
+
     try {
 
-        const titulo = req.params.titulo;
-        const article = await Article.findOne({ titulo: titulo });
-
-        if (article) {
+        const article = await Article.findById(id);
 
             return res.status(200).json({
                 ok: true,
@@ -45,14 +47,6 @@ const getArticleAdmin = async (req, res) => {
                 data: article,
             });
 
-        } else {
-
-            return res.status(404).json({
-                ok: false,
-                msg: "No existe el artículo",
-            });
-
-        }
     } catch (error) {
 
         return res.status(500).json({
@@ -70,17 +64,13 @@ const createArticle = async (req, res) => {
 
     try {
 
-        if (!res.errors) {
+        const article = await newArticle.save();
 
-            await newArticle.save();
-            return res.redirect('/admin/articles');
-
-        } else {
-
-            const errors = res.errors;
-            res.render('../views/admin/adminCreate.ejs', { errors });
-
-        }
+        return res.status(201).json({
+            ok: true,
+            msg: 'Artículo creado.',
+            article
+        });
 
     } catch (error) {
 
@@ -93,36 +83,20 @@ const createArticle = async (req, res) => {
 };
 
 
-const formCreateArticle = async (req, res) => {
-
-    res.render('../views/admin/adminCreate.ejs');
-
-
-};
-
 const editArticle = async (req, res) => {
-
 
     try {
 
         const id = req.params.id;
-        const titulo = req.body.titulo;
-        const extracto = req.body.extracto;
-        const cuerpo = req.body.cuerpo;   
+        const body = req.body;
 
-        const update = { 'titulo': titulo, 'extracto': extracto, 'cuerpo': cuerpo};
+        const article = await Article.findOneAndUpdate({ _id: id }, { $set: body });
 
-        if (!res.errors) {
-
-            await Article.findOneAndUpdate({ _id: id }, { $set: update });
-            return res.redirect('/admin/articles');
-
-        } else {
-
-            const movie = await Article.findById(req.params.id);
-            const errors = res.errors;
-            res.render('../views/admin/adminEdit.ejs', { movie, errors });
-        }
+        return res.status(200).json({
+            ok: true,
+            msg: 'Articulo actualizado.',
+            article
+        });
 
     } catch (error) {
 
@@ -134,25 +108,20 @@ const editArticle = async (req, res) => {
     };
 };
 
-const formEditArticle = async (req, res) => {
 
-    const id = req.params.id;
-    const article = await Article.findOne({ _id: id });
-    res.render('../views/admin/adminEdit.ejs', {
-        article,
-    });
-
-};
-
-
-const deleteMovie = async (req, res) => {
+const deleteArticle = async (req, res) => {
 
     try {
 
         const id = req.params.id;
-        await Article.findOneAndDelete({ _id: id });
+        const article = await Article.findOneAndDelete({ _id: id });
 
-        return res.redirect('/admin/article');
+        return res.status(200).json({
+            ok: true,
+            msg: 'Artículo eliminado correctamente.',
+            article
+        });
+    
 
     } catch (error) {
 
@@ -169,8 +138,6 @@ module.exports = {
     getArticleAdmin,
     getArticlesAdmin,
     createArticle,
-    formCreateArticle,
     editArticle,
-    formEditArticle,
     deleteArticle,
 }

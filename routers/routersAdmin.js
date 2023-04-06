@@ -1,30 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-const { validateInputs } = require('../middleware/inputValidator');
-const { check } = require('express-validator');
-const { createArticle, deleteArticle, editArticle, formCreateArticle , formEditArticle, getArticleAdmin, getArticlesAdmin} = require('../controllers/adminControllers');
+//const { validateInputs } = require('../middleware/inputValidator');
+const { createArticle, deleteArticle, editArticle, getArticleAdmin, getArticlesAdmin} = require('../controllers/adminControllers');
 
 
-router.get('/article', getArticleAdmin);
-router.get('/article/title/:title', getArticlesAdmin);
+router.get('/', getArticlesAdmin);
 
-router.post('/article/create-article', [
-  validateInputs
-],
-  createArticle);
+router.get('/:id', getArticleAdmin);
 
-router.get('/article/create-form', formCreateArticle);
+router.post('/', createArticle);
 
-router.post('/article/edit-article/:id', [
-  validateInputs
-],
-  editArticle);
+router.post(':id', editArticle);
 
-router.get('/article/edit-form/:id', formEditArticle);
-
-
-router.get('/article/remove-article/:id', deleteArticle);
+router.get('/:id', deleteArticle);
 
 
 module.exports = router;

@@ -12,11 +12,6 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-app.use(express.static('public'));
-
-app.set('view engine', 'ejs');
-
-app.set('views', __dirname + '/views'); //* también es posible hacer `${__dirname}/views`
 
 //* CONEXION A BBDD
 connection()
@@ -35,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 
-
+app.use('/api/v1', require('./routers/routersAdmin'));
 
 
 
