@@ -11,9 +11,9 @@ router.get('/:id', getArticleAdmin);
 
 router.post('/', createArticle);
 
-router.post(':id', editArticle);
+router.put('/:id', editArticle);
 
-router.get('/:id', deleteArticle);
+router.delete('/:id', deleteArticle);
 
 
 module.exports = router;

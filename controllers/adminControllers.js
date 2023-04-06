@@ -7,27 +7,18 @@ const getArticlesAdmin = async (req, res) => {
 
         const article = await Article.find()
 
-        if (!article) {
-
-            return res.status(404).json({
-                ok: false,
-                msg: 'CUATROCIENTOS CUATRO NOOOOOO!'
-            })
-
-        } else {
-
-            return res.render('admin/adminView', {
-                article,
-            })
-
-        }
-
+        return res.status(200).json({
+            ok: true,
+            msg: "Articulo encontrado",
+            data: article,
+        });
+    
 
     } catch (error) {
 
         return res.status(500).json({
             ok: false,
-            msg: "Error retrieving the movie",
+            msg: "Error al obtener el artículo",
         });
 
     }
@@ -86,16 +77,18 @@ const createArticle = async (req, res) => {
 const editArticle = async (req, res) => {
 
     try {
-
+        
         const id = req.params.id;
         const body = req.body;
 
         const article = await Article.findOneAndUpdate({ _id: id }, { $set: body });
 
         return res.status(200).json({
+
             ok: true,
             msg: 'Articulo actualizado.',
             article
+
         });
 
     } catch (error) {
@@ -117,9 +110,11 @@ const deleteArticle = async (req, res) => {
         const article = await Article.findOneAndDelete({ _id: id });
 
         return res.status(200).json({
+
             ok: true,
             msg: 'Artículo eliminado correctamente.',
             article
+            
         });
     
 
