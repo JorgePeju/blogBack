@@ -1,18 +1,43 @@
 const Article = require('../models/articleMode');
 
-
 const getArticlesAdmin = async (req, res) => {
 
     try {
 
-        const article = await Article.find()
+        const search = new RegExp(`${req.query.search}`, 'i'); //* i ignora mayus y minus
 
-        return res.status(200).json({
-            ok: true,
-            msg: "Articulo encontrado",
-            data: article,
-        });
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 2;
     
+        if (req.query.search != undefined) {
+
+            const article  = await Article.paginate(
+
+                { $or: [
+                    { titulo: search }, 
+                    { extracto: search }, 
+                    { cuerpo: search }
+                ] },
+                { page, limit }
+
+            );
+
+            return res.status(200).json({
+                ok: true,
+                data: article
+            });
+
+        } else {
+
+            const article  = await Article.paginate({}, { limit, page });
+
+            return res.status(200).json({
+                ok: true,
+                data: article
+            });
+
+        };
+
 
     } catch (error) {
 
@@ -22,7 +47,7 @@ const getArticlesAdmin = async (req, res) => {
         });
 
     }
-}
+};
 
 const getArticleAdmin = async (req, res) => {
 
@@ -32,11 +57,11 @@ const getArticleAdmin = async (req, res) => {
 
         const article = await Article.findById(id);
 
-            return res.status(200).json({
-                ok: true,
-                msg: "Articulo encontrado",
-                data: article,
-            });
+        return res.status(200).json({
+            ok: true,
+            msg: "Articulo encontrado",
+            data: article,
+        });
 
     } catch (error) {
 
@@ -77,7 +102,7 @@ const createArticle = async (req, res) => {
 const editArticle = async (req, res) => {
 
     try {
-        
+
         const id = req.params.id;
         const body = req.body;
 
@@ -114,9 +139,9 @@ const deleteArticle = async (req, res) => {
             ok: true,
             msg: 'Artículo eliminado correctamente.',
             article
-            
+
         });
-    
+
 
     } catch (error) {
 
@@ -127,6 +152,8 @@ const deleteArticle = async (req, res) => {
     }
 
 };
+
+
 
 module.exports = {
 
