@@ -18,12 +18,15 @@ const ArticleSchema = new Schema({
         required: true,
         trim: true
     },
-
+    imagen: {
+        type: String,
+    },
     fecha: {
         type: Date,
         default: Date.now
     }
-})
+    
+});
 
 ArticleSchema.plugin(mongoosePaginate)
 

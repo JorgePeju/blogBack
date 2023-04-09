@@ -21,7 +21,7 @@ const getArticlesAdmin = async (req, res) => {
                     ]
                 },
 
-                { pate, limit }
+                { page, limit }
 
             );
 
