@@ -13,12 +13,15 @@ const getArticlesAdmin = async (req, res) => {
 
             const article  = await Article.paginate(
 
-                { $or: [
+                { $or: 
+                    [
                     { titulo: search }, 
                     { extracto: search }, 
                     { cuerpo: search }
-                ] },
-                { page, limit }
+                    ]
+                },
+
+                { pate, limit }
 
             );
 
@@ -29,7 +32,7 @@ const getArticlesAdmin = async (req, res) => {
 
         } else {
 
-            const article  = await Article.paginate({}, { limit, page });
+            const article  = await Article.paginate({}, { page, limit });
 
             return res.status(200).json({
                 ok: true,
@@ -37,7 +40,6 @@ const getArticlesAdmin = async (req, res) => {
             });
 
         };
-
 
     } catch (error) {
 
