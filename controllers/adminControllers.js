@@ -4,19 +4,17 @@ const getArticlesAdmin = async (req, res) => {
 
     try {
 
-        const search = new RegExp(`${req.query.search}`, 'i'); //* i ignora mayus y minus
-
+        const search = req.query.search && new RegExp(`${req.query.search}`, 'i'); //* i ignora mayus y minus
         const page = req.query.page || 1;
         const limit = req.query.limit || 2;
     
-        if (req.query.search != undefined) {
+        if (search) {
 
             const article  = await Article.paginate(
 
                 { $or: 
                     [
                     { titulo: search }, 
-                    { extracto: search }, 
                     { cuerpo: search }
                     ]
                 },
