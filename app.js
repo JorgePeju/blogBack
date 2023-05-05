@@ -24,15 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 
 //* RUTAS
 
-
-
-
-
-
-
 app.use('/api/v1', require('./routers/routersAdmin'));
-
-
 
 
 //* Listener
